@@ -4,14 +4,23 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:rentalin_id/app/data/constant/color.dart';
+import 'package:rentalin_id/app/modules/manage-motorcycle/views/manage_motorcycle_view.dart';
 import 'package:rentalin_id/app/widgets/app_bar.components.dart';
 import 'package:rentalin_id/app/widgets/input_text_noicon.components.dart';
 
 import '../controllers/add_motorcyle_controller.dart';
 import '../models/motorcycle.dart';
 
+import 'package:audioplayers/audioplayers.dart';
+
 class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final AudioPlayer audioPlayer = AudioPlayer();
+
+  Future<void> playNotificationSound() async {
+    await audioPlayer.play(AssetSource('audio/notification.mp3'));
+  }
+
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => AddMotorcycleController());
@@ -19,17 +28,16 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
 
     return Scaffold(
       appBar: AppBar(
-          // surfaceTintColor: tdGrey,
-          scrolledUnderElevation: 0,
-          // leadingWidth: 344,
-          elevation: 0,
-          backgroundColor: tdBg,
-          toolbarHeight: 80,
-          titleSpacing: 0,
-          automaticallyImplyLeading: false,
-          title: const AppBarComponents(
-            nameMenu: 'Add New Motorcycle',
-          )),
+        scrolledUnderElevation: 0,
+        elevation: 0,
+        backgroundColor: tdBg,
+        toolbarHeight: 80,
+        titleSpacing: 0,
+        automaticallyImplyLeading: false,
+        title: const AppBarComponents(
+          nameMenu: 'Add New Motorcycle',
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.only(left: 23, right: 23),
         child: Column(
@@ -39,17 +47,20 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
               width: 344,
               height: 148,
               decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/img/img1.jpg"),
-                      fit: BoxFit.cover),
-                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                image: DecorationImage(
+                  image: AssetImage("assets/img/img1.jpg"),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+              ),
             ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.rectangle,
-                  border: Border.all(color: tdGrey),
-                  borderRadius: const BorderRadius.all(Radius.circular(8))),
+                color: Colors.white,
+                shape: BoxShape.rectangle,
+                border: Border.all(color: tdGrey),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+              ),
               width: 345,
               height: 217,
               margin: EdgeInsets.only(top: 10),
@@ -64,7 +75,9 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
                       Text(
                         "Detail Motor",
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                       Text("Merk Motor"),
                       Text("Motor Name"),
@@ -76,15 +89,13 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      const Text(
-                        "",
-                      ),
+                      const Text(""),
                       Text(motorcycle.merkMotor),
                       Text(motorcycle.motorName),
                       Text(motorcycle.typeMotor),
                       Text(motorcycle.platMotor),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -97,9 +108,7 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
                     () => Checkbox(
                       value: controller.motorcycle.value.isRecommended,
                       onChanged: (value) {
-                        // Update the controller's value when the checkbox is toggled
-                        controller.motorcycle.value.isRecommended =
-                            value ?? false;
+                        controller.motorcycle.value.isRecommended = value ?? false;
                       },
                     ),
                   ),
@@ -110,38 +119,33 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
             Padding(
               padding: EdgeInsets.only(top: 10),
               child: InputTextNoIcon(
-                  labelText: "Price/Day",
-                  hintText: "Rp. 150.000",
-                  onChanged: (value) {
-                    double? price = double.tryParse(value);
-                    if (price != null) {
-                      controller.motorcycle.value.pricePerDay = price;
-                    }
-                  }),
+                labelText: "Price/Day",
+                hintText: "Rp. 150.000",
+                onChanged: (value) {
+                  double? price = double.tryParse(value);
+                  if (price != null) {
+                    controller.motorcycle.value.pricePerDay = price;
+                  }
+                },
+              ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly, // Align buttons evenly
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // "Go Back" button with fixed size
                 SizedBox(
                   width: 163,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
                       Get.back();
-                      // Define what happens when "Go Back" is pressed
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: tdBlue,
-                      backgroundColor: Colors.white, // Text color
-                      side: BorderSide(color: tdBlue), // Border color
+                      backgroundColor: Colors.white,
+                      side: BorderSide(color: tdBlue),
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Rounded corners
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: Text(
@@ -154,30 +158,28 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
                     ),
                   ),
                 ),
-                // "Add New" button with fixed size
                 SizedBox(
                   width: 163,
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
-                      CollectionReference addMotor =
-                          firestore.collection("Manage MotorCycle");
+                      await playNotificationSound(); // Play sound here
+                      CollectionReference addMotor = firestore.collection("Manage MotorCycle");
                       await addMotor.add({
                         'Merk Motor': motorcycle.merkMotor,
                         'Motor Name': motorcycle.motorName,
                         'Plat Motor': motorcycle.platMotor,
                         'Price/Day': motorcycle.pricePerDay,
                         'Recommendation': motorcycle.isRecommended,
-                        'Type Motor': motorcycle.typeMotor
+                        'Type Motor': motorcycle.typeMotor,
                       });
-                      // Define what happens when "Add New" is pressed
+                      Get.off(ManageMotorcycleView());
                     },
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
-                      backgroundColor: tdgreen, // Text color
+                      backgroundColor: tdgreen,
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(8), // Rounded corners
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     child: Text(
@@ -191,11 +193,10 @@ class AddMotorcycleDetailView extends GetView<AddMotorcycleController> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
     );
-    // TODO: implement build
   }
 }

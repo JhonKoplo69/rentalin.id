@@ -9,11 +9,17 @@ import 'package:rentalin_id/app/widgets/button_main.components.dart';
 import '../controllers/update_motorcyle_controller.dart';
 import 'package:rentalin_id/app/widgets/input_text_noicon.components.dart';
 
+import 'package:audioplayers/audioplayers.dart';
+
 class UpdateMotorcycleDetailView extends StatelessWidget {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  final AudioPlayer audioPlayer = AudioPlayer();
   // Initialize the controller here
   final UpdateMotorcycleController controller = Get.put(UpdateMotorcycleController());
+
+  Future<void> playNotificationSound() async {
+    await audioPlayer.play(AssetSource('audio/notification.mp3'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,6 +140,7 @@ class UpdateMotorcycleDetailView extends StatelessWidget {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () async {
+                      await playNotificationSound();
                       CollectionReference motorCollection = firestore.collection("Manage MotorCycle");
                       await motorCollection.doc(motorcycleId).update({
                         'Merk Motor': controller.motorcycle.value.merkMotor,
