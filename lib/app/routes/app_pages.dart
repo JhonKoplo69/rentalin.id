@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:rentalin_id/app/modules/rent/views/rent3_view.dart';
 
 import '../modules/calendar/bindings/calendar_binding.dart';
 import '../modules/calendar/views/calendar_view.dart';
@@ -93,6 +94,10 @@ class AppPages {
       page: () => const WebviewPageView(),
       binding: WebviewPageBinding(),
     ),
-    
+    GetPage(
+      name: _Paths.RENT, // Rute untuk Rent3View
+      page: () => const Rent3View(),
+      binding: RentBinding(), // Gunakan binding yang sama seperti RentView
+    ),
   ];
 }

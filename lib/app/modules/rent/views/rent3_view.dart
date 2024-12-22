@@ -3,6 +3,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:rentalin_id/app/modules/rent/controllers/rent_controller.dart';
 import 'package:rentalin_id/app/widgets/input_text_noicon.components.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 import '../../../data/constant/color.dart';
 import '../../../widgets/app_bar.components.dart';
@@ -58,11 +60,13 @@ class Info3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final RentController controller = Get.put(RentController());
+
     return Container(
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.fromLTRB(13, 21, 14, 21),
       width: 344,
-      height: 400  ,
+      height: 500, // Tambahkan tinggi untuk menampilkan data lokasi
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
@@ -70,30 +74,70 @@ class Info3 extends StatelessWidget {
       ),
       child: Column(
         children: [
-          InputTextNoIcon(
-            labelText: 'Deliver Address', 
-            hintText: 'Enter your Delivery Address'
+          GestureDetector(
+            onTap: () {
+              controller.getLocation();
+            },
+            child: Container(
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.blue, width: 1),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Select Pickup Location',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Icon(Icons.map, color: Colors.blue),
+                ],
+              ),
+            ),
           ),
-          SizedBox(height: 10,),
+          Obx(() => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Latitude: ${controller.latitude.value}",
+                      style: TextStyle(fontSize: 14)),
+                  Text("Longitude: ${controller.longitude.value}",
+                      style: TextStyle(fontSize: 14)),
+                  Text("Address: ${controller.address.value}",
+                      style: TextStyle(fontSize: 14)),
+                ],
+              )),
+          SizedBox(height: 10),
           InputTextNoIcon(
-            labelText: 'Pickup Address', 
-            hintText: 'Enter your Pickup Address'
+            labelText: 'Deliver Address',
+            hintText: 'Enter your Delivery Address',
           ),
-          SizedBox(height: 10,),
+          SizedBox(height: 10),
           InputTextNoIcon(
-            labelText: 'Method Payment', 
-            hintText: 'Select your method payment'
+            labelText: 'Pickup Address',
+            hintText: 'Enter your Pickup Address',
           ),
-          SizedBox(height: 10,),
-           InputTextNoIcon(
-            labelText: 'Total Payment', 
-            hintText: 'Rp.300.000'
+          SizedBox(height: 10),
+          InputTextNoIcon(
+            labelText: 'Method Payment',
+            hintText: 'Select your method payment',
+          ),
+          SizedBox(height: 10),
+          InputTextNoIcon(
+            labelText: 'Total Payment',
+            hintText: 'Rp.300.000',
           ),
         ],
       ),
     );
   }
 }
+
 
 class BtnBk2 extends StatelessWidget {
   const BtnBk2({super.key});

@@ -13,7 +13,7 @@ plugins {
 
 android {
     namespace = "com.example.rentalin_id"
-    compileSdk = flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -47,6 +47,14 @@ android {
     }
 }
 
+dependencies {
+    // Import Firebase BoM (Bill of Materials)
+    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+
+    // Firebase dependencies (versi otomatis ditentukan BoM)
+    implementation 'com.google.firebase:firebase-analytics'
+    // Tambahkan Firebase dependencies lain yang diperlukan
+}
 flutter {
     source = "../.."
 }
